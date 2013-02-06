@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 template <typename T = int>
@@ -42,9 +43,9 @@ public:
     {
         root->Print(0);
     }
-}
+    
 private:
-    bool Insert(T value, Node* node)
+    bool Insert(T value, RBNode<T> *&node)
     {
         if (node == NULL)
         {
@@ -58,6 +59,7 @@ private:
             return Insert(value, node->right);
         
         return false;
+    }
 };  
 
 int main ()

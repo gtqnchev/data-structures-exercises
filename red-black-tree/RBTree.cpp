@@ -7,17 +7,16 @@ struct RBNode
 {
     T value;
     bool color;
-    RBNode<T> *left;
-    RBNode<T> *right;
-    RBNode(T v, bool c = 1, RBNode *l = NULL, RBNode *r = NULL): value(v), color(v), left(l), right(r)
+    RBNode<T> *parent, *left, *right;
+    RBNode(T v, bool c = 1, RBNode *p = NULL, RBNode *l = NULL, RBNode *r = NULL): value(v), color(v), parent(p), left(l), right(r)
     {}
-    
+
     void Print(int offset)
 	{
-		if(right) right->Print(offset + 5);
-        
+        if(right) right->Print(offset + 5);
+
         cout << setw(offset) << value << endl;
-		
+
         if(left) left->Print(offset + 5);
 	}
 };
@@ -30,49 +29,57 @@ class RBTree
 public:
     RBTree() : root(NULL)
     {}
+
     bool Empty()
     {
         return root == NULL;
     }
-    bool Add(T value)
+
+    void Add(T value)
     {
-        return Insert(value, root);
+        Insert(value, &root);
     }
-    
+
     void Print()
     {
-        root->Print(0);
+        if(Empty())
+            cout << "Tree is empty!" << endl;
+        else
+            root->Print(0);
     }
-    
+
 private:
-    bool Insert(T value, RBNode<T> *&node)
+
+    void Insert(T value, RBNode<T> **node)
     {
-        if (node == NULL)
+        while (*node != NULL)
         {
-            node = new RBNode<T>(value);
-            return true;
+            if(value < (*node)->value)
+                node = &((*node)->left);
+            else
+                node = &((*node)->right);
         }
-        else if (node->value > value)
-            return Insert(value, node->left);
-        
-        else if (node->value < value)
-            return Insert(value, node->right);
-        
-        return false;
+        *node = new RBNode<T>(value,);
+
     }
-};  
+
+
+};
 
 int main ()
 {
     cout << "Testing a red-black tree." << endl;
     RBTree<> tree;
-    
+
     cout << "Test if a new Tree is empty:" << tree.Empty() << endl;
-    
-    cout << "Test if we can add elements:" << tree.Add(5) << endl;
-    
+
+    cout << "Test if we can add elements:" << endl;
+    tree.Add(5);
+    tree.Add(10);
+    tree.Add(8);
+
     cout << "Test if we can print the tree:" <<endl;
         tree.Print();
-        
+
     return 0;
 }

@@ -155,7 +155,7 @@ public:
             to_remove = Succesor(node);
         }
         
-        if(to_remove->left != NULL) // Mark the succesor of that node
+        if(to_remove->left != NULL)   // Mark the succesor of that node
         {
             to_save = to_remove->left;
         }
@@ -164,17 +164,17 @@ public:
             to_save = to_remove->right;
         }
     
-        if(to_save != NULL) // If there is a succesor, change the succesor parent to the parent of the node to be removed
-        {
-            to_save->parent = to_remove->parent;
+        if(to_save != NULL)                       // If there is a succesor, 
+        {                                         // change the succesor parent 
+            to_save->parent = to_remove->parent;  // to the parent of the node to be removed
         }
         
-        if(to_remove->parent == NULL) // If the node to be removed is the root, set the new root
-        {
+        if(to_remove->parent == NULL)             // If the node to be removed is the root,
+        {                                         // set the new root
             root = to_save;
         }
-        else if(to_remove == to_remove->parent->left) // Else, set the parent of the node to be removed to point at the new node
-        {
+        else if(to_remove == to_remove->parent->left) // Else, set the parent of the node to be removed
+        {                                             // to point at the new node
             to_remove->parent->left = to_save;
         }
         else

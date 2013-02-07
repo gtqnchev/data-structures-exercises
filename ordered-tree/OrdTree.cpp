@@ -12,13 +12,14 @@ struct Node
     {}
 
     void PrintTree(int offset)
-	{
+    {
         if(right) right->PrintTree(offset + 5);
 
         cout << setw(offset) << value << endl;
 
         if(left) left->PrintTree(offset + 5);
-	}
+    }
+
     void Print()
     {
         cout << value << " ";
@@ -34,10 +35,12 @@ public:
     {
         root = NULL;
     }
+   
     Node<T>* Root()
     {
 	return root;
     }
+   
     void Insert(T value)
     {
         Node<T> *parent = NULL;
@@ -160,6 +163,7 @@ public:
         {
             to_save = to_remove->right;
         }
+    
         if(to_save != NULL)
         {
             to_save->parent = to_remove->parent;
@@ -182,6 +186,7 @@ public:
         {
             node->value = to_remove->value;
         }
+        
         delete to_remove;
     }
 };

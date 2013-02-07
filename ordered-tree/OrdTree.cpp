@@ -145,8 +145,8 @@ public:
     void Delete(Node<T>* node)
     {
         Node<T>  *to_remove = NULL, *to_save = NULL;
-  
-        if(node->left == NULL || node->right == NULL)
+        
+        if(node->left == NULL || node->right == NULL) // Mark the node to be removed 
         {
             to_remove = node;
         }
@@ -155,7 +155,7 @@ public:
             to_remove = Succesor(node);
         }
         
-        if(to_remove->left != NULL)
+        if(to_remove->left != NULL) // Mark the succesor of that node
         {
             to_save = to_remove->left;
         }
@@ -164,16 +164,16 @@ public:
             to_save = to_remove->right;
         }
     
-        if(to_save != NULL)
+        if(to_save != NULL) // If there is a succesor, change the succesor parent to the parent of the node to be removed
         {
             to_save->parent = to_remove->parent;
         }
         
-        if(to_remove->parent == NULL)
+        if(to_remove->parent == NULL) // If the node to be removed is the root, set the new root
         {
             root = to_save;
         }
-        else if(to_remove == to_remove->parent->left)
+        else if(to_remove == to_remove->parent->left) // Else, set the parent of the node to be removed to point at the new node
         {
             to_remove->parent->left = to_save;
         }

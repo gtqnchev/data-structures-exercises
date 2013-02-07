@@ -36,6 +36,58 @@ class RBTree
 {
     RBNode<T> *root;
     RBNode<T> *nil;
+    void InsertFixup(RBNode<T> *node)
+    {
+        while(node->parent->color == 1)
+        {
+            RBNode<T> *y;
+            if(node->parent->parent->left == node->parent)
+            {
+                y = node->parent->parent->right;                  // y is the uncle of node
+                if (y->color == 1)                                // CASE 1
+                {
+                    y->color = 0;
+                    node->parent->color = 0;
+                    y->parent->color = 1;
+                }
+                else if (node->parent->right == node)             // CASE 2
+                {
+                    node = node->parent;
+                    LeftRotate(node);
+                }
+                else                                              // CASE 3 
+                {
+                    RightRotate(node->parent->parent);
+                    node = node->parent;
+                    node->color = 0;
+                    node->right->color = 1;
+                }
+            }
+            else  //It's symetric to the first block
+            {
+                y = node->parent->parent->left;                  // y is the uncle of node
+                if (y->color == 1)                                // CASE 1
+                {
+                    y->color = 0;
+                    node->parent->color = 0;
+                    y->parent->color = 1;
+                }
+                else if (node->parent->left == node)             // CASE 2
+                {
+                    node = node->parent;
+                    RightRotate(node);
+                }
+                else                                              // CASE 3 
+                {
+                    LeftRotate(node->parent->parent);
+                    node = node->parent;
+                    node->color = 0;
+                    node->left->color = 1;
+                }
+            }
+        }
+        root->color = 0;
+    }
 public:
     RBTree()
     {
@@ -63,6 +115,7 @@ public:
                 current = &((*current)->right);
         }
         *current = new RBNode<T>(value, 1, parent, nil, nil);
+        InsertFixup(*current);
     }
 
     void InorderTreeWalk(RBNode<T>* node)
@@ -125,7 +178,6 @@ public:
         }
         return parent;
     }
-
 
     RBNode<T>* Predecessor(RBNode<T>* node)
     {
@@ -225,7 +277,7 @@ public:
         RBNode<T>* y = node->left;
         if (y == nil) return;
         
-        node->left = y->right;                          // Turn y's left subtree into x's right subtree
+        node->left = y->right;                          // Turn y's right subtree into x's left subtree
         if(y->right != nil) y->right->parent = node;
         
         if (node->parent == nil)                        // Link x's parent to y
@@ -238,7 +290,7 @@ public:
         y->parent = node->parent;
         
         node->parent = y;
-        y->right = node;                                 // Put x on y's left
+        y->right = node;                                 // Put x on y's right
     }
 };
 
@@ -280,24 +332,24 @@ int main ()
     tree.RightRotate(tree.Search(10));
     tree.RightRotate(tree.Search(8));
     tree.Print();
-    // cout << "Test deletion at the root "<< endl;
-    // tree.Delete(tree.Root());
-    // tree.Print();
+    cout << "Test deletion at the root "<< endl;
+    tree.Delete(tree.Root());
+    tree.Print();
     
-    // cout << "Test deletion at 7" << endl;
-    // tree.Delete(tree.Search(7));
-    // tree.Print();
+    cout << "Test deletion at 7" << endl;
+    tree.Delete(tree.Search(7));
+    tree.Print();
 
-    // cout << "Test deletion at 10" << endl;
-    // tree.Delete(tree.Search(10));
-    // tree.Print();
+    cout << "Test deletion at 10" << endl;
+    tree.Delete(tree.Search(10));
+    tree.Print();
 
-    // cout << "Test deletion at 3" << endl;
-    // tree.Delete(tree.Search(3));
-    // tree.Print();    
+    cout << "Test deletion at 3" << endl;
+    tree.Delete(tree.Search(3));
+    tree.Print();    
 
-    // cout << "Test deletion at 6" << endl;
-    // tree.Delete(tree.Search(6));
-    // tree.Print();
+    cout << "Test deletion at 6" << endl;
+    tree.Delete(tree.Search(6));
+    tree.Print();
     return 0;
 }

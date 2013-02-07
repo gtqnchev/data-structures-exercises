@@ -198,12 +198,54 @@ public:
         
         delete to_remove;
     }
+   
+    void LeftRotate(RBNode<T> *node)
+    {
+        RBNode<T>* y = node->right;
+        if (y == nil) return;
+        
+        node->right = y->left;                          // Turn y's left subtree into x's right subtree
+        if(y->left != nil) y->left->parent = node;
+        
+        if (node->parent == nil)                        // Link x's parent to y
+        {
+            root = y;
+            y->parent = nil;
+        }
+        else  if (node->parent->left == node) node->parent->left = y;
+        else node->parent->right = y;
+        y->parent = node->parent;
+        
+        node->parent = y;
+        y->left = node;                                 // Put x on y's left
+    }
+    
+    void RightRotate(RBNode<T> *node)
+    {
+        RBNode<T>* y = node->left;
+        if (y == nil) return;
+        
+        node->left = y->right;                          // Turn y's left subtree into x's right subtree
+        if(y->right != nil) y->right->parent = node;
+        
+        if (node->parent == nil)                        // Link x's parent to y
+        {
+            root = y;              
+            y->parent = nil;
+        }
+        else  if (node->parent->left == node) node->parent->left = y;
+        else node->parent->right = y;
+        y->parent = node->parent;
+        
+        node->parent = y;
+        y->right = node;                                 // Put x on y's left
+    }
 };
 
 
 int main ()
 {
-    cout << "Testing an ordered tree." << endl;
+    cout << "Testing an red-black tree." << endl;
     RBTree<> tree;
 
     cout << "Test if we can add elements:" << endl;
@@ -216,31 +258,46 @@ int main ()
     tree.InorderTreeWalk(tree.Root());
 
     cout << endl << "Test if we can search the tree: " <<  tree.Search(10) << " " << tree.Search(22) << endl;
-
     cout << "Test tree minimun function: " << tree.Minimum(tree.Root())->value << endl
          << "Test tree maximum function: " << tree.Maximum(tree.Root())->value << endl;
     
     cout << "Test tree succesort function at root " << tree.Succesor(tree.Root())->value << endl
          << "Test tree predecessor fucntion at root " << tree.Predecessor(tree.Root())->value << endl;
     
-    cout << "Test deletion at the root "<< endl;
-    tree.Delete(tree.Root());
+    cout << "Left rotate at root:" << endl;
+    tree.LeftRotate(tree.Root());
+    tree.Print();
+
+    cout << endl << "Left rotate at 3 :" << endl;
+    tree.LeftRotate(tree.Search(3));
     tree.Print();
     
-    cout << "Test deletion at 7" << endl;
-    tree.Delete(tree.Search(7));
+    cout << endl << "Right rotate at root :" << endl;
+    tree.RightRotate(tree.Root());
     tree.Print();
 
-    cout << "Test deletion at 10" << endl;
-    tree.Delete(tree.Search(10));
+    cout << endl << "Right rotate at 10 and then right rotate at 8 :" << endl;
+    tree.RightRotate(tree.Search(10));
+    tree.RightRotate(tree.Search(8));
     tree.Print();
+    // cout << "Test deletion at the root "<< endl;
+    // tree.Delete(tree.Root());
+    // tree.Print();
+    
+    // cout << "Test deletion at 7" << endl;
+    // tree.Delete(tree.Search(7));
+    // tree.Print();
 
-    cout << "Test deletion at 3" << endl;
-    tree.Delete(tree.Search(3));
-    tree.Print();    
+    // cout << "Test deletion at 10" << endl;
+    // tree.Delete(tree.Search(10));
+    // tree.Print();
 
-    cout << "Test deletion at 6" << endl;
-    tree.Delete(tree.Search(6));
-    tree.Print();
+    // cout << "Test deletion at 3" << endl;
+    // tree.Delete(tree.Search(3));
+    // tree.Print();    
+
+    // cout << "Test deletion at 6" << endl;
+    // tree.Delete(tree.Search(6));
+    // tree.Print();
     return 0;
 }
